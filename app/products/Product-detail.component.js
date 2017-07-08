@@ -12,8 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var router_1 = require("@angular/router");
 var core_1 = require("@angular/core");
 var ProductDetailComponent = (function () {
-    function ProductDetailComponent(_activateRoutr) {
+    function ProductDetailComponent(_activateRoutr, _router) {
         this._activateRoutr = _activateRoutr;
+        this._router = _router;
         this.pagetitle = "Product Detail";
     }
     ProductDetailComponent.prototype.ngOnInit = function () {
@@ -21,11 +22,14 @@ var ProductDetailComponent = (function () {
         var id = +this._activateRoutr.snapshot.params['id'];
         this.pagetitle += " : " + id;
     };
+    ProductDetailComponent.prototype.onBack = function () {
+        this._router.navigate(['/products']);
+    };
     ProductDetailComponent = __decorate([
         core_1.Component({
             templateUrl: 'app/products/product-detail.component.html'
         }),
-        __metadata("design:paramtypes", [router_1.ActivatedRoute])
+        __metadata("design:paramtypes", [router_1.ActivatedRoute, router_1.Router])
     ], ProductDetailComponent);
     return ProductDetailComponent;
 }());
