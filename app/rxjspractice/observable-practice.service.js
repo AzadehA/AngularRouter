@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Observable_1 = require("rxjs/Observable");
+require("rxjs/Rx");
 var ObservablePracticeService = (function () {
     function ObservablePracticeService() {
     }
@@ -25,7 +26,8 @@ var ObservablePracticeService = (function () {
                 }
             };
             produceValue();
-        });
+        }).map(function (n) { return 2 * n; })
+            .filter(function (n) { return n > 4; });
         s.subscribe(function (value) { return console.log("-value: " + value); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;

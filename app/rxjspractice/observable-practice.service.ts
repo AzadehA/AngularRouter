@@ -1,9 +1,10 @@
 ﻿
 import { Injectable } from '@angular/core';
 import { Observable } from  'rxjs/Observable';
-//import {Observable} from "rxjs";
-
+import 'rxjs/Rx';
 import { Observer } from 'rxjs/Observer';
+
+
 @Injectable()
 export class ObservablePracticeService {
 
@@ -27,7 +28,10 @@ export class ObservablePracticeService {
             }
             produceValue();
 
-        });  
+        }).map(n => 2*n)
+             .filter(n=> n > 4)
+            //.find(n => n % 2 === 1)
+            ;  
         
         s.subscribe(
             value => console.log(`-value: ${value}`),
