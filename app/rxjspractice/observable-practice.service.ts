@@ -14,41 +14,29 @@ export class ObservablePracticeService {
 
         let numbers = [1, 4, 6, 10];
         let s = Observable.create(observer => {
-            for (let n of numbers) {
-                observer.next(n);
+            let index = 0;
+            let produceValue = () => {
+                observer.next(numbers[index++]);
+                if (index < numbers.length)
+                {
+                    setTimeout(produceValue, 2000)
+                }
+                else {
+                    observer.complete();
+                }
             }
-            observer.complete();
-        }
+            produceValue();
 
-        );  
-        //this is clasical way
-        s.subscribe(new MyObserver());
-
-        // this is the second and easy way of creating Observer for more simple cases
-
-        //s.subscribe(
-        //    value => console.log(`-value: ${value}`),
-        //    e => console.log(`-error: ${e}`),
-        //    () => console.log(`-complete`)            
-        //);
+        });  
+        
+        s.subscribe(
+            value => console.log(`-value: ${value}`),
+            e => console.log(`-error: ${e}`),
+            () => console.log(`-complete`)            
+        );
 
     };
 
 
-}
-
-//one way of creating Observer 
-class MyObserver implements Observer<number> {
-
-    next(value : any) {
-        console.log(`value: ${value} `);
-    }
-
-    error(e: any) {
-        console.log(`error: ${e}`);
-    }
-
-    complete()
-    { console.log('completed');}
 }
    

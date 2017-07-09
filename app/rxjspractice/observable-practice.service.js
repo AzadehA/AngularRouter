@@ -14,20 +14,19 @@ var ObservablePracticeService = (function () {
     ObservablePracticeService.prototype.testOBS = function () {
         var numbers = [1, 4, 6, 10];
         var s = Observable_1.Observable.create(function (observer) {
-            for (var _i = 0, numbers_1 = numbers; _i < numbers_1.length; _i++) {
-                var n = numbers_1[_i];
-                observer.next(n);
-            }
-            observer.complete();
+            var index = 0;
+            var produceValue = function () {
+                observer.next(numbers[index++]);
+                if (index < numbers.length) {
+                    setTimeout(produceValue, 2000);
+                }
+                else {
+                    observer.complete();
+                }
+            };
+            produceValue();
         });
-        //this is clasical way
-        s.subscribe(new MyObserver());
-        // this is the second and easy way of creating Observer for more simple cases
-        //s.subscribe(
-        //    value => console.log(`-value: ${value}`),
-        //    e => console.log(`-error: ${e}`),
-        //    () => console.log(`-complete`)            
-        //);
+        s.subscribe(function (value) { return console.log("-value: " + value); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;
     ObservablePracticeService = __decorate([
@@ -36,17 +35,4 @@ var ObservablePracticeService = (function () {
     return ObservablePracticeService;
 }());
 exports.ObservablePracticeService = ObservablePracticeService;
-//one way of creating Observer 
-var MyObserver = (function () {
-    function MyObserver() {
-    }
-    MyObserver.prototype.next = function (value) {
-        console.log("value: " + value + " ");
-    };
-    MyObserver.prototype.error = function (e) {
-        console.log("error: " + e);
-    };
-    MyObserver.prototype.complete = function () { console.log('completed'); };
-    return MyObserver;
-}());
 //# sourceMappingURL=observable-practice.service.js.map
