@@ -1,3 +1,4 @@
+/// <reference path="rxjspractice/observable-practice.component.ts" />
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +11,8 @@ import { ProductDetailGuard } from './products/product-guard.service';
 import { ProductFilterPipe } from './products/product-filter.pipe';
 import { StarComponent } from './shared/star.component';
 import { WelcomeComponent } from './home/welcome.component';
+import { ObservablePracticeComponent } from './rxjspractice/observable-practice.component';
+
 
 @NgModule({
   imports: [
@@ -30,7 +33,8 @@ import { WelcomeComponent } from './home/welcome.component';
       ProductDetailComponent,
       ProductFilterPipe,
       WelcomeComponent,
-      StarComponent
+      StarComponent,
+      ObservablePracticeComponent
   ],
   providers: [ProductDetailGuard],
   bootstrap: [ AppComponent ]
