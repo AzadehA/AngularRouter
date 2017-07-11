@@ -9,26 +9,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Observable_1 = require("rxjs/Observable");
 require("rxjs/Rx");
+//import {  Observable } from  'rxjs';
 var ObservablePracticeService = (function () {
     function ObservablePracticeService() {
     }
     ObservablePracticeService.prototype.testOBS = function () {
-        var numbers = [1, 4, 6, 10];
-        var s = Observable_1.Observable.create(function (observer) {
-            var index = 0;
-            var produceValue = function () {
-                observer.next(numbers[index++]);
-                if (index < numbers.length) {
-                    setTimeout(produceValue, 2000);
-                }
-                else {
-                    observer.complete();
-                }
+        var s = Observable_1.Observable.fromEvent(document, "mousemove")
+            .map(function (e) {
+            return {
+                x: e.clientX,
+                y: e.clientY
             };
-            produceValue();
-        }).map(function (n) { return 2 * n; })
-            .filter(function (n) { return n > 4; });
-        s.subscribe(function (value) { return console.log("-value: " + value); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
+        })
+            .filter(function (value) { return value.x < 500; });
+        s.subscribe(function (value) { return console.log(value); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;
     ObservablePracticeService = __decorate([
@@ -37,4 +31,26 @@ var ObservablePracticeService = (function () {
     return ObservablePracticeService;
 }());
 exports.ObservablePracticeService = ObservablePracticeService;
+/*
+let numbers = [1, 4, 6, 10];
+     let s = Observable.create(observer => {
+         let index = 0;
+         let produceValue = () => {
+             observer.next(numbers[index++]);
+             if (index < numbers.length)
+             {
+                 setTimeout(produceValue, 2000)
+             }
+             else {
+                 observer.complete();
+             }
+         }
+         produceValue();
+
+     }).map(n => 2*n)
+          .filter(n=> n > 4)
+         //.find(n => n % 2 === 1)
+         ;
+
+*/ 
 //# sourceMappingURL=observable-practice.service.js.map
