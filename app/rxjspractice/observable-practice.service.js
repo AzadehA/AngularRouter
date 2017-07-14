@@ -9,11 +9,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Observable_1 = require("rxjs/Observable");
 require("rxjs/Rx");
-//import {  Observable } from  'rxjs';
 var ObservablePracticeService = (function () {
     function ObservablePracticeService() {
     }
     ObservablePracticeService.prototype.testOBS = function () {
+        var circle = document.getElementById("crl");
         var s = Observable_1.Observable.fromEvent(document, "mousemove")
             .map(function (e) {
             return {
@@ -21,8 +21,20 @@ var ObservablePracticeService = (function () {
                 y: e.clientY
             };
         })
-            .filter(function (value) { return value.x < 500; });
-        s.subscribe(function (value) { return console.log(value); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
+            .filter(function (value) { return value.x < 500; })
+            .delay(200);
+        function onNext(v) {
+            console.log(String(v.x));
+            circle.style.width = '10px';
+            circle.style.height = '10px';
+            // circle.style.position = 'center';
+            circle.style.left = String(v.x);
+            circle.style.top = String(v.y);
+            //circle.style.left = String(v.x);
+            //circle.style.top = String(v.y);
+            circle.style.backgroundColor = 'green';
+        }
+        s.subscribe(onNext, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;
     ObservablePracticeService = __decorate([

@@ -24,6 +24,13 @@ var ObservablePracticeComponent = (function () {
             selector: 'observable-practice',
             templateUrl: 'app/rxjspractice/observable-practice-component.html',
             providers: [observable_practice_service_1.ObservablePracticeService]
+            //,
+            //styles: [`#circle { width: 20px ;
+            //                    height: 20px;
+            //                    border-radius: 50%;
+            //                    background-color: red;
+            //                    position: absolute;
+            //                  }`]
         }),
         __metadata("design:paramtypes", [observable_practice_service_1.ObservablePracticeService])
     ], ObservablePracticeComponent);

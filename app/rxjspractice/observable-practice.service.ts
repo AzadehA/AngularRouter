@@ -2,10 +2,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from  'rxjs/Observable';
 import 'rxjs/Rx';
-//import 'rxjs/add/operator/map';
-//import 'rxjs/add/operator/filter';
 import { Observer } from 'rxjs/Observer';
-//import {  Observable } from  'rxjs';
+
   
 @Injectable()
 export class ObservablePracticeService {
@@ -14,7 +12,8 @@ export class ObservablePracticeService {
 
 
     testOBS(): void {
-
+        let circle = document.getElementById("crl");
+        
         let s = Observable.fromEvent(document, "mousemove")
             .map((e: MouseEvent) => {
                 return {
@@ -22,15 +21,28 @@ export class ObservablePracticeService {
                     y: e.clientY
                    }
             })
-            .filter(value => value.x < 500)            ;
+            .filter(value => value.x < 500)
+            .delay(200);
            
              
-        
+        function onNext(v : any ) {
+           console.log(String(v.x));
+          
+           circle.style.width = '10px';
+           circle.style.height = '10px';
+          // circle.style.position = 'center';
+           circle.style.left = String(v.x);
+           circle.style.top = String(v.y);
+           //circle.style.left = String(v.x);
+           //circle.style.top = String(v.y);
+            circle.style.backgroundColor = 'green';
+        }
         s.subscribe(
-            value => console.log(value),
+            onNext,
             e => console.log(`-error: ${e}`),
             () => console.log(`-complete`)            
         );
+
 
     };
 
