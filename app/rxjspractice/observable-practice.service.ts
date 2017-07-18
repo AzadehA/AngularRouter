@@ -12,33 +12,27 @@ export class ObservablePracticeService {
 
 
     testOBS(): void {
-        let circle = document.getElementById("crl");
+        let outPut = document.getElementById("output");
+        let button = document.getElementById("button");
         
-        let s = Observable.fromEvent(document, "mousemove")
-            .map((e: MouseEvent) => {
-                return {
-                    x: e.clientX,
-                    y: e.clientY
-                   }
-            })
-            .filter(value => value.x < 500)
-            .delay(200);
+        let clickGetMovie = Observable.fromEvent(button, "click");
            
+        function load(url: string) {
+            let xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", () => {
+                let movies = JSON.parse(xhr.responseText);
+                movies.forEach((m: string) => {
+                    let innerDiv = document.createElement("div");
+                    innerDiv.innerText = m.title;
+                    outPut.appendChild(innerDiv);
+                })
+            })
+            xhr.open("GET", url)
+            xhr.send();
+        }   
              
-        function onNext(v : any ) {
-           console.log(String(v.x));
-          
-           circle.style.width = '10px';
-           circle.style.height = '10px';
-          // circle.style.position = 'center';
-           circle.style.left = String(v.x);
-           circle.style.top = String(v.y);
-           //circle.style.left = String(v.x);
-           //circle.style.top = String(v.y);
-            circle.style.backgroundColor = 'green';
-        }
-        s.subscribe(
-            onNext,
+        clickGetMovie.subscribe(
+            v => load("./app/rxjspractice/movies.json"),
             e => console.log(`-error: ${e}`),
             () => console.log(`-complete`)            
         );

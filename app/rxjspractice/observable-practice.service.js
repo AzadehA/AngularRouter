@@ -13,28 +13,23 @@ var ObservablePracticeService = (function () {
     function ObservablePracticeService() {
     }
     ObservablePracticeService.prototype.testOBS = function () {
-        var circle = document.getElementById("crl");
-        var s = Observable_1.Observable.fromEvent(document, "mousemove")
-            .map(function (e) {
-            return {
-                x: e.clientX,
-                y: e.clientY
-            };
-        })
-            .filter(function (value) { return value.x < 500; })
-            .delay(200);
-        function onNext(v) {
-            console.log(String(v.x));
-            circle.style.width = '10px';
-            circle.style.height = '10px';
-            // circle.style.position = 'center';
-            circle.style.left = String(v.x);
-            circle.style.top = String(v.y);
-            //circle.style.left = String(v.x);
-            //circle.style.top = String(v.y);
-            circle.style.backgroundColor = 'green';
+        var outPut = document.getElementById("output");
+        var button = document.getElementById("button");
+        var clickGetMovie = Observable_1.Observable.fromEvent(button, "click");
+        function load(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", function () {
+                var movies = JSON.parse(xhr.responseText);
+                movies.forEach(function (m) {
+                    var innerDiv = document.createElement("div");
+                    innerDiv.innerText = m.title;
+                    outPut.appendChild(innerDiv);
+                });
+            });
+            xhr.open("GET", url);
+            xhr.send();
         }
-        s.subscribe(onNext, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
+        clickGetMovie.subscribe(function (v) { return load("./app/rxjspractice/movies.json"); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;
     ObservablePracticeService = __decorate([
