@@ -20,13 +20,19 @@ var ObservablePracticeService = (function () {
             return Observable_1.Observable.create(function (observer) {
                 var xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", function () {
-                    var data = JSON.parse(xhr.responseText);
-                    observer.next(data);
-                    observer.complete();
+                    //adding logic for error handeling 
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        observer.next(data);
+                        observer.complete();
+                    }
+                    else {
+                        observer.error(xhr.statusText);
+                    }
                 });
                 xhr.open("GET", url);
                 xhr.send();
-            });
+            }).retry(3);
         }
         function renderMoviews(movies) {
             movies.forEach(function (m) {
@@ -35,7 +41,7 @@ var ObservablePracticeService = (function () {
                 outPut.appendChild(innerDiv);
             });
         }
-        clickGetMovie.flatMap(function (e) { return load("./app/rxjspractice/movies.json"); })
+        clickGetMovie.flatMap(function (e) { return load("./app/rxjspractice/movies404.json"); })
             .subscribe(renderMoviews, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;

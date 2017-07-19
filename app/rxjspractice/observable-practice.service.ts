@@ -22,14 +22,20 @@ export class ObservablePracticeService {
             return Observable.create((observer : any)  => {
                 let xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", () => {
-                    let data = JSON.parse(xhr.responseText);
-                    observer.next(data);
-                    observer.complete();
+                    //adding logic for error handeling 
+                    if (xhr.status === 200) {
+                        let data = JSON.parse(xhr.responseText);
+                        observer.next(data);
+                        observer.complete();
+                    }
+                    else {
+                        observer.error(xhr.statusText);
+                    }
                 })
 
                 xhr.open("GET", url)
                 xhr.send();
-            }); 
+            }).retry(3); 
         } 
           
         function renderMoviews(movies: any) {
@@ -41,7 +47,7 @@ export class ObservablePracticeService {
             })
         }
 
-        clickGetMovie.flatMap(e => load("./app/rxjspractice/movies.json"))
+        clickGetMovie.flatMap(e => load("./app/rxjspractice/movies404.json"))
             .subscribe(
             renderMoviews,                
             e => console.log(`-error: ${e}`),
