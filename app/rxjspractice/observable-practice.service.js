@@ -17,19 +17,26 @@ var ObservablePracticeService = (function () {
         var button = document.getElementById("button");
         var clickGetMovie = Observable_1.Observable.fromEvent(button, "click");
         function load(url) {
-            var xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", function () {
-                var movies = JSON.parse(xhr.responseText);
-                movies.forEach(function (m) {
-                    var innerDiv = document.createElement("div");
-                    innerDiv.innerText = m.title;
-                    outPut.appendChild(innerDiv);
+            return Observable_1.Observable.create(function (observer) {
+                var xhr = new XMLHttpRequest();
+                xhr.addEventListener("load", function () {
+                    var data = JSON.parse(xhr.responseText);
+                    observer.next(data);
+                    observer.complete();
                 });
+                xhr.open("GET", url);
+                xhr.send();
             });
-            xhr.open("GET", url);
-            xhr.send();
         }
-        clickGetMovie.subscribe(function (v) { return load("./app/rxjspractice/movies.json"); }, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
+        function renderMoviews(movies) {
+            movies.forEach(function (m) {
+                var innerDiv = document.createElement("div");
+                innerDiv.innerText = m.title;
+                outPut.appendChild(innerDiv);
+            });
+        }
+        clickGetMovie.flatMap(function (e) { return load("./app/rxjspractice/movies.json"); })
+            .subscribe(renderMoviews, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;
     ObservablePracticeService = __decorate([
@@ -38,26 +45,4 @@ var ObservablePracticeService = (function () {
     return ObservablePracticeService;
 }());
 exports.ObservablePracticeService = ObservablePracticeService;
-/*
-let numbers = [1, 4, 6, 10];
-     let s = Observable.create(observer => {
-         let index = 0;
-         let produceValue = () => {
-             observer.next(numbers[index++]);
-             if (index < numbers.length)
-             {
-                 setTimeout(produceValue, 2000)
-             }
-             else {
-                 observer.complete();
-             }
-         }
-         produceValue();
-
-     }).map(n => 2*n)
-          .filter(n=> n > 4)
-         //.find(n => n % 2 === 1)
-         ;
-
-*/ 
 //# sourceMappingURL=observable-practice.service.js.map

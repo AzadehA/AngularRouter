@@ -18,21 +18,32 @@ export class ObservablePracticeService {
         let clickGetMovie = Observable.fromEvent(button, "click");
            
         function load(url: string) {
-            let xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", () => {
-                let movies = JSON.parse(xhr.responseText);
-                movies.forEach((m: string) => {
-                    let innerDiv = document.createElement("div");
-                    innerDiv.innerText = m.title;
-                    outPut.appendChild(innerDiv);
+
+            return Observable.create((observer : any)  => {
+                let xhr = new XMLHttpRequest();
+                xhr.addEventListener("load", () => {
+                    let data = JSON.parse(xhr.responseText);
+                    observer.next(data);
+                    observer.complete();
                 })
+
+                xhr.open("GET", url)
+                xhr.send();
+            }); 
+        } 
+          
+        function renderMoviews(movies: any) {
+            movies.forEach((m: any) => {
+                let innerDiv = document.createElement("div");
+                innerDiv.innerText = m.title;
+                outPut.appendChild(innerDiv);
+
             })
-            xhr.open("GET", url)
-            xhr.send();
-        }   
-             
-        clickGetMovie.subscribe(
-            v => load("./app/rxjspractice/movies.json"),
+        }
+
+        clickGetMovie.flatMap(e => load("./app/rxjspractice/movies.json"))
+            .subscribe(
+            renderMoviews,                
             e => console.log(`-error: ${e}`),
             () => console.log(`-complete`)            
         );
@@ -42,25 +53,4 @@ export class ObservablePracticeService {
 
 
 }
-   /*
-let numbers = [1, 4, 6, 10];
-        let s = Observable.create(observer => {
-            let index = 0;
-            let produceValue = () => {
-                observer.next(numbers[index++]);
-                if (index < numbers.length)
-                {
-                    setTimeout(produceValue, 2000)
-                }
-                else {
-                    observer.complete();
-                }
-            }
-            produceValue();
-
-        }).map(n => 2*n)
-             .filter(n=> n > 4)
-            //.find(n => n % 2 === 1)
-            ;
-
-*/
+  
