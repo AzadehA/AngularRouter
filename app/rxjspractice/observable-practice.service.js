@@ -32,7 +32,19 @@ var ObservablePracticeService = (function () {
                 });
                 xhr.open("GET", url);
                 xhr.send();
-            }).retry(3);
+            }).retryWhen(retryStrategy({ attempts: 3, delay: 1500 }));
+        }
+        function retryStrategy(_a) {
+            var _b = _a.attempts, attempts = _b === void 0 ? 4 : _b, _c = _a.delay, delay = _c === void 0 ? 1000 : _c;
+            return function (errors) {
+                return errors // this observable that is returned will be used by retryStrategy to figure out if it should retry or not 
+                    .scan(function (acc, value) {
+                    console.log(acc, value);
+                    return acc + 1;
+                }, 0)
+                    .takeWhile(function (acc) { return acc < attempts; })
+                    .delay(delay);
+            };
         }
         function renderMoviews(movies) {
             movies.forEach(function (m) {

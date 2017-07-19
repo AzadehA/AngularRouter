@@ -35,9 +35,22 @@ export class ObservablePracticeService {
 
                 xhr.open("GET", url)
                 xhr.send();
-            }).retry(3); 
+            }).retryWhen(retryStrategy({attempts : 3 , delay : 1500})); 
         } 
-          
+
+        function retryStrategy({attempts = 4, delay = 1000}) {
+            return function (errors : Observable<string>) {
+                return errors   // this observable that is returned will be used by retryStrategy to figure out if it should retry or not 
+                                // if this observable complete or gives error retryStrategy will say I am done
+                    .scan((acc : number, value : string) => {
+                       console.log(acc , value);
+                       return acc + 1;
+                    },0)
+                    .takeWhile(acc =>  acc < attempts )
+                    .delay(delay);
+            }
+        }
+
         function renderMoviews(movies: any) {
             movies.forEach((m: any) => {
                 let innerDiv = document.createElement("div");
