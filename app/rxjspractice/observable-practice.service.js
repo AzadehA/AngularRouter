@@ -34,6 +34,9 @@ var ObservablePracticeService = (function () {
                 xhr.send();
             }).retryWhen(retryStrategy({ attempts: 3, delay: 1500 }));
         }
+        function loadWithFetch(url) {
+            return Observable_1.Observable.fromPromise(fetch("./app/rxjspractice/movies.json").then(function (r) { return r.json(); }));
+        }
         function retryStrategy(_a) {
             var _b = _a.attempts, attempts = _b === void 0 ? 4 : _b, _c = _a.delay, delay = _c === void 0 ? 1000 : _c;
             return function (errors) {
@@ -53,7 +56,7 @@ var ObservablePracticeService = (function () {
                 outPut.appendChild(innerDiv);
             });
         }
-        clickGetMovie.flatMap(function (e) { return load("./app/rxjspractice/movies404.json"); })
+        clickGetMovie.flatMap(function (e) { return loadWithFetch("./app/rxjspractice/movies.json"); }) //load("./app/rxjspractice/movies.json"))
             .subscribe(renderMoviews, function (e) { return console.log("-error: " + e); }, function () { return console.log("-complete"); });
     };
     ;

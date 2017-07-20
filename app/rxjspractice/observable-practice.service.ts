@@ -38,6 +38,11 @@ export class ObservablePracticeService {
             }).retryWhen(retryStrategy({attempts : 3 , delay : 1500})); 
         } 
 
+        function loadWithFetch(url: string)
+        {
+           
+           return Observable.fromPromise( fetch("./app/rxjspractice/movies.json").then( r => r.json()));
+        }
         function retryStrategy({attempts = 4, delay = 1000}) {
             return function (errors : Observable<string>) {
                 return errors   // this observable that is returned will be used by retryStrategy to figure out if it should retry or not 
@@ -60,7 +65,7 @@ export class ObservablePracticeService {
             })
         }
 
-        clickGetMovie.flatMap(e => load("./app/rxjspractice/movies404.json"))
+        clickGetMovie.flatMap(e => loadWithFetch("./app/rxjspractice/movies.json"))//load("./app/rxjspractice/movies.json"))
             .subscribe(
             renderMoviews,                
             e => console.log(`-error: ${e}`),
